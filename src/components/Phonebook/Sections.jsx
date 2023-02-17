@@ -15,7 +15,7 @@ const sectionStyles = {
   as: 'section',
 };
 
-export const SectionPhonebook = ({ children }) => {
+export const Section = ({ children }) => {
   return (
     <Box {...sectionStyles}>
       <TitleStyled as={'h2'}>Phonebook</TitleStyled>

@@ -1,11 +1,12 @@
 import { PropTypes } from 'prop-types';
-import { Box } from 'components/Box';
+// import { Box } from 'components/Box';
 import { ContactsItemStyled, TextStyled } from './Phonebook.styled';
 import { useDispatch } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { toast } from 'react-toastify';
+import { Box } from '@mui/material';
 
 export const ContactsItem = ({ id, name, phone }) => {
   const dispatch = useDispatch();

@@ -1,7 +1,5 @@
-import { Box, Typography } from '@mui/material';
-
-import { ContactList } from 'components/Phonebook/ContactsList';
-import { Filter } from 'components/Phonebook/Filter';
+import { Typography, Box } from '@mui/material';
+import { ContactForm } from 'components/Phonebook/ContactsForm';
 
 const sectionStyles = {
   width: '416px',
@@ -17,15 +15,14 @@ const sectionStyles = {
   as: 'section',
 };
 
-export const Contacts = () => {
+export const NewContact = () => {
   return (
     <>
-      <Box {...sectionStyles}>
+      <Box sx={{ ...sectionStyles }}>
         <Typography component="h1" variant="h5" textAlign="center">
-          Contacts
+          Phonebook
         </Typography>
-        <Filter />
-        <ContactList />
+        <ContactForm />
       </Box>
     </>
   );

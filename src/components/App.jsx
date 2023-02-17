@@ -1,4 +1,5 @@
 import { Contacts } from 'pages/Contacts/Contacts';
+import { NewContact } from 'pages/Contacts/NewContact';
 import { Login } from 'pages/Login/Login';
 import { Register } from 'pages/Register/Register';
 import { Suspense } from 'react';
@@ -16,7 +17,7 @@ export const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="contacts" element={<Contacts />} />
-          <Route path="contacts/new" element={<Contacts />} />
+          <Route path="contacts/new" element={<NewContact />} />
           <Route path="contacts/:contactId" element={<Contacts />} />
           <Route path="contacts/:contactId/edit" element={<Contacts />} />
         </Route>

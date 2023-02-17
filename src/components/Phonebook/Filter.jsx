@@ -14,7 +14,7 @@ export const Filter = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
       <TextField
         id="filter"
         label="Find contacts by name"
