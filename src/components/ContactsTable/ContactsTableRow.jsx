@@ -25,10 +25,8 @@ export const ContactsTableRow = ({ columns, row }) => {
         {columns.map(column => {
           const value = row[column.id];
           return (
-            <Hidden smDown={column.id === 'number'}>
-              <TableCell key={column.id} align={column.align}>
-                {value}
-              </TableCell>
+            <Hidden key={column.id} smDown={column.id === 'number'}>
+              <TableCell align={column.align}>{value}</TableCell>
             </Hidden>
           );
         })}

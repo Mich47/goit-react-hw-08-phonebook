@@ -18,6 +18,7 @@ import { CssBaseline } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AccountCircle } from '@mui/icons-material';
 import { logoutUser } from 'redux/auth/auth.operations';
+import { toast } from 'react-toastify';
 
 export const SharedLayout = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -60,8 +61,12 @@ export const SharedLayout = () => {
     handleCloseUserMenu();
     navigate('/profile');
   };
-  const handleLogout = () => {
-    dispatch(logoutUser());
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+    } catch (error) {
+      toast.error('Logout error');
+    }
   };
 
   return (
@@ -225,7 +230,7 @@ export const SharedLayout = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ py: 3 }}>
         <Outlet />
       </Box>
     </Box>

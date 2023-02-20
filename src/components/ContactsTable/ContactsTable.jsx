@@ -60,9 +60,8 @@ export const ContactsTable = () => {
                 <TableHead>
                   <TableRow>
                     {columns.map(column => (
-                      <Hidden smDown={column.id === 'number'}>
+                      <Hidden key={column.id} smDown={column.id === 'number'}>
                         <TableCell
-                          key={column.id}
                           align={column.align}
                           style={{
                             minWidth: column.minWidth,
