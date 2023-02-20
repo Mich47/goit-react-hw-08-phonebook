@@ -25,10 +25,11 @@ export const App = () => {
 
   return (
     <BrowserRouter basename="/goit-react-hw-08-phonebook">
-      {/* <SharedLayout /> */}
+      <SharedLayout />
       <Suspense fallback="">
         <Routes>
-          <Route path="/" element={<SharedLayout />}>
+          <Route>
+            {/* <Route path="/" element={<SharedLayout />}> */}
             <Route path="" element={<RestrictedRoute />}>
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
