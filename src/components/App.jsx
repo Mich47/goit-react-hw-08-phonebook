@@ -2,7 +2,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { lazy, Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { refreshUser } from 'redux/auth/auth.operations';
 import { PrivateRoute } from './AuthRouts/PrivateRoute';
 import { RestrictedRoute } from './AuthRouts/RestrictedRoute';
@@ -16,7 +16,11 @@ const Profile = lazy(() => import('pages/Profile/Profile'));
 export const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(refreshUser());
+    try {
+      dispatch(refreshUser());
+    } catch (error) {
+      toast.error('Authorization error');
+    }
   }, [dispatch]);
 
   return (
