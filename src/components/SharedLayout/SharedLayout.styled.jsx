@@ -1,5 +1,10 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+
+export const LinkStyled = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+`;
 
 export const NavLinkStyled = styled(NavLink)`
   color: inherit;

@@ -11,11 +11,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { useMemo, useState } from 'react';
-import { NavLinkStyled } from './SharedLayout.styled';
+import { LinkStyled, NavLinkStyled } from './SharedLayout.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthToken } from 'redux/auth/auth.selectors';
 import { CssBaseline } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { AccountCircle } from '@mui/icons-material';
 import { logoutUser } from 'redux/auth/auth.operations';
 import { toast } from 'react-toastify';
@@ -26,7 +26,6 @@ export const SharedLayout = () => {
   const token = useSelector(selectAuthToken);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const pages = useMemo(
     () =>
@@ -57,10 +56,6 @@ export const SharedLayout = () => {
     setAnchorElUser(null);
   };
 
-  const handleOpenProfile = () => {
-    handleCloseUserMenu();
-    navigate('/profile');
-  };
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
@@ -215,8 +210,8 @@ export const SharedLayout = () => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    <MenuItem onClick={handleOpenProfile}>
-                      <Typography textAlign="center">Profile</Typography>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <LinkStyled to="/profile">Profile</LinkStyled>
                     </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography textAlign="center" onClick={handleLogout}>
