@@ -211,7 +211,9 @@ export const SharedLayout = () => {
                     onClose={handleCloseUserMenu}
                   >
                     <MenuItem onClick={handleCloseUserMenu}>
-                      <LinkStyled to="/profile">Profile</LinkStyled>
+                      <Typography textAlign="center">
+                        <LinkStyled to="/profile">Profile</LinkStyled>
+                      </Typography>
                     </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography textAlign="center" onClick={handleLogout}>
