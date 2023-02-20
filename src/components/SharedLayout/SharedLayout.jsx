@@ -15,12 +15,11 @@ import { LinkStyled, NavLinkStyled } from './SharedLayout.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthToken } from 'redux/auth/auth.selectors';
 import { CssBaseline } from '@mui/material';
-import { Outlet } from 'react-router-dom';
 import { AccountCircle } from '@mui/icons-material';
 import { logoutUser } from 'redux/auth/auth.operations';
 import { toast } from 'react-toastify';
 
-export const SharedLayout = () => {
+export const SharedLayout = ({ children }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const token = useSelector(selectAuthToken);
@@ -65,13 +64,7 @@ export const SharedLayout = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}
-    >
+    <>
       <CssBaseline />
       <AppBar position="static">
         <Container maxWidth="lg">
@@ -100,7 +93,7 @@ export const SharedLayout = () => {
 
             <Box
               sx={{
-                flexGrow: { xs: 0, sm: 1 },
+                flexGrow: 1,
                 display: { xs: 'flex', md: 'none' },
               }}
             >
@@ -133,8 +126,12 @@ export const SharedLayout = () => {
                 }}
               >
                 {pages.map((page, index) => (
-                  <MenuItem key={index} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                  <MenuItem
+                    key={index}
+                    sx={{ p: 0, justifyContent: 'center' }}
+                    onClick={handleCloseNavMenu}
+                  >
+                    {page}
                   </MenuItem>
                 ))}
               </Menu>
@@ -142,8 +139,7 @@ export const SharedLayout = () => {
             <PeopleAltIcon
               sx={{
                 display: { xs: 'flex', md: 'none' },
-                mr: { xs: 'auto', sm: 1 },
-                ml: { xs: 1, sm: 0 },
+                mr: 1,
               }}
             />
             <Typography
@@ -153,7 +149,7 @@ export const SharedLayout = () => {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'none', sm: 'flex', md: 'none' },
+                display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
                 fontFamily: 'monospace',
                 fontWeight: 700,
@@ -168,68 +164,77 @@ export const SharedLayout = () => {
               {pages.map((page, index) => (
                 <Button
                   key={index}
+                  sx={{ p: 0, color: 'white', display: 'block' }}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page}
                 </Button>
               ))}
             </Box>
 
-            {token && (
-              <>
-                <Typography textAlign="center" mr={1}>
-                  {token.user.name}
-                </Typography>
-                <Box sx={{ flexGrow: 0 }}>
-                  <Tooltip title="Open settings">
-                    <IconButton
-                      onClick={handleOpenUserMenu}
-                      size="large"
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
-                      color="inherit"
-                    >
-                      <AccountCircle />
-                    </IconButton>
-                  </Tooltip>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {/* {token && ( */}
+              {true && (
+                <>
+                  <Typography
+                    textAlign="center"
+                    sx={{ display: { xs: 'none', sm: 'block' }, mr: 1 }}
                   >
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">
+                    {/* {token.user.name} */}
+                  </Typography>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title="Open settings">
+                      <IconButton
+                        onClick={handleOpenUserMenu}
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        color="inherit"
+                      >
+                        <AccountCircle />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      <MenuItem
+                        sx={{ p: 0, justifyContent: 'center' }}
+                        onClick={handleCloseUserMenu}
+                      >
                         <LinkStyled to="/profile">Profile</LinkStyled>
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center" onClick={handleLogout}>
-                        Logout
-                      </Typography>
-                    </MenuItem>
-                  </Menu>
-                </Box>{' '}
-              </>
-            )}
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ p: 0, justifyContent: 'center' }}
+                        onClick={handleLogout}
+                      >
+                        <LinkStyled to="/login">Logout</LinkStyled>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                </>
+              )}
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
       <Box component="main" sx={{ py: 3 }}>
-        <Outlet />
+        {/* <Outlet /> */}
+        {children}
       </Box>
-    </Box>
+    </>
   );
 };
