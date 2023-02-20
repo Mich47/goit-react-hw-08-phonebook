@@ -98,7 +98,12 @@ export const SharedLayout = () => {
               CONTACTS
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box
+              sx={{
+                flexGrow: { xs: 0, sm: 1 },
+                display: { xs: 'flex', md: 'none' },
+              }}
+            >
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -135,7 +140,11 @@ export const SharedLayout = () => {
               </Menu>
             </Box>
             <PeopleAltIcon
-              sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+              sx={{
+                display: { xs: 'flex', md: 'none' },
+                mr: { xs: 'auto', sm: 1 },
+                ml: { xs: 1, sm: 0 },
+              }}
             />
             <Typography
               variant="h5"
@@ -144,7 +153,7 @@ export const SharedLayout = () => {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                display: { xs: 'none', sm: 'flex', md: 'none' },
                 flexGrow: 1,
                 fontFamily: 'monospace',
                 fontWeight: 700,
