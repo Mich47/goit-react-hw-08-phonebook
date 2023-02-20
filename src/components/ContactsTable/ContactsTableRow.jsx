@@ -1,5 +1,12 @@
 import { PropTypes } from 'prop-types';
-import { IconButton, Stack, TableCell, TableRow, Tooltip } from '@mui/material';
+import {
+  Hidden,
+  IconButton,
+  Stack,
+  TableCell,
+  TableRow,
+  Tooltip,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { nanoid } from '@reduxjs/toolkit';
@@ -18,9 +25,11 @@ export const ContactsTableRow = ({ columns, row }) => {
         {columns.map(column => {
           const value = row[column.id];
           return (
-            <TableCell key={column.id} align={column.align}>
-              {value}
-            </TableCell>
+            <Hidden smDown={column.id === 'number'}>
+              <TableCell key={column.id} align={column.align}>
+                {value}
+              </TableCell>
+            </Hidden>
           );
         })}
         <TableCell key={nanoid()}>

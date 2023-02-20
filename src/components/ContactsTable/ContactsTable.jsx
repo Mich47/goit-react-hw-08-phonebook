@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Hidden, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from 'redux/contacts/contacts.operations';
 import {
@@ -60,16 +60,18 @@ export const ContactsTable = () => {
                 <TableHead>
                   <TableRow>
                     {columns.map(column => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{
-                          minWidth: column.minWidth,
-                          backgroundColor: 'grey',
-                        }}
-                      >
-                        {column.label}
-                      </TableCell>
+                      <Hidden smDown={column.id === 'number'}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{
+                            minWidth: column.minWidth,
+                            backgroundColor: 'grey',
+                          }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      </Hidden>
                     ))}
                     <TableCell
                       key="edit"
