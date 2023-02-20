@@ -1,167 +1,224 @@
-import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { Outlet } from 'react-router-dom';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import { useMemo, useState } from 'react';
 import { NavLinkStyled } from './SharedLayout.styled';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken } from 'redux/auth/auth.selectors';
+import { CssBaseline } from '@mui/material';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { AccountCircle } from '@mui/icons-material';
+import { logoutUser } from 'redux/auth/auth.operations';
 
-const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+export const SharedLayout = () => {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const token = useSelector(selectAuthToken);
 
-export const SharedLayout = props => {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(prevState => !prevState);
-  };
-
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Contacts
-      </Typography>
-      <Divider />
-      <List>
-        {navItems.map(item => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+  const pages = useMemo(
+    () =>
+      token
+        ? [
+            <NavLinkStyled to="/contacts">My Contacts</NavLinkStyled>,
+            <NavLinkStyled to="/new">New Contact</NavLinkStyled>,
+          ]
+        : [
+            <NavLinkStyled to="/login">Login</NavLinkStyled>,
+            <NavLinkStyled to="/register">Register</NavLinkStyled>,
+          ],
+    [token]
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  const handleOpenNavMenu = event => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = event => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleOpenProfile = () => {
+    handleCloseUserMenu();
+    navigate('/profile');
+  };
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
       <CssBaseline />
-      <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Contacts1
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <Button sx={{ color: '#fff' }}>
-              <NavLinkStyled to="/login">Login</NavLinkStyled>
-            </Button>
-            <Button sx={{ color: '#fff' }}>
-              <NavLinkStyled to="/register">Register</NavLinkStyled>
-            </Button>
-            <Button sx={{ color: '#fff' }}>
-              <NavLinkStyled to="/contacts">Contacts</NavLinkStyled>
-            </Button>
-            <Button sx={{ color: '#fff' }}>
-              <NavLinkStyled to="/contacts/new">New Contact</NavLinkStyled>
-            </Button>
-            {/* {navItems.map(item => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))} */}
-          </Box>
-        </Toolbar>
+      <AppBar position="static">
+        <Container maxWidth="lg">
+          <Toolbar disableGutters>
+            <PeopleAltIcon
+              sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+              size="large"
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              CONTACTS
+            </Typography>
+
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
+              >
+                {pages.map((page, index) => (
+                  <MenuItem key={index} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+            <PeopleAltIcon
+              sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+            />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              CONTACTS
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map((page, index) => (
+                <Button
+                  key={index}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+
+            {token && (
+              <>
+                <Typography textAlign="center" mr={1}>
+                  {token.user.name}
+                </Typography>
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton
+                      onClick={handleOpenUserMenu}
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem onClick={handleOpenProfile}>
+                      <Typography textAlign="center">Profile</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center" onClick={handleLogout}>
+                        Logout
+                      </Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>{' '}
+              </>
+            )}
+          </Toolbar>
+        </Container>
       </AppBar>
-      <Box component="nav">
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box>
       <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
         <Outlet />
       </Box>
     </Box>
   );
 };
-
-SharedLayout.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
-
-// import { Outlet } from 'react-router-dom';
-// import * as React from 'react';
-// import AppBar from '@mui/material/AppBar';
-// import Box from '@mui/material/Box';
-// import Toolbar from '@mui/material/Toolbar';
-// import Typography from '@mui/material/Typography';
-// import Button from '@mui/material/Button';
-// import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/Menu';
-
-// export const SharedLayout = () => {
-//   return (
-//     <>
-//       <Box sx={{ flexGrow: 1 }}>
-//         <AppBar position="fixed">
-//           <Toolbar>
-//             <IconButton
-//               size="large"
-//               edge="start"
-//               color="inherit"
-//               aria-label="menu"
-//               sx={{ mr: 2 }}
-//             >
-//               <MenuIcon />
-//             </IconButton>
-//             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-//               News
-//             </Typography>
-//             <Button color="inherit">Login</Button>
-//           </Toolbar>
-//         </AppBar>
-//       </Box>
-//       <Box position="static">
-//         <Outlet />
-//       </Box>
-//     </>
-//   );
-// };

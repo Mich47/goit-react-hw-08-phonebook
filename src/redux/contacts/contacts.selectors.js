@@ -1,8 +1,8 @@
-export const selectContacts = state => state.contacts.items;
-export const selectIsLoading = state => state.contacts.isLoading;
-export const selectError = state => state.contacts.error;
+import { selectFilter } from 'redux/filter/filter.selectors';
 
-export const selectFilter = state => state.filter;
+export const selectContacts = state => state.contacts.items;
+export const selectContactsStatus = state => state.contacts.status;
+export const selectContactsError = state => state.contacts.error;
 
 export const selectFilteredContacts = state => {
   const contacts = selectContacts(state);

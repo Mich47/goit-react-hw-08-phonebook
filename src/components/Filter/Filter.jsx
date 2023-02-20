@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import { setFilter } from 'redux/filter/filter.slice';
 import { TextField } from '@mui/material';
-import { selectFilter } from 'redux/contacts/contacts.selectors';
+import { selectFilter } from 'redux/filter/filter.selectors';
 
 export const Filter = () => {
   const filter = useSelector(selectFilter);
@@ -14,7 +14,7 @@ export const Filter = () => {
   };
 
   return (
-    <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <TextField
         id="filter"
         label="Find contacts by name"

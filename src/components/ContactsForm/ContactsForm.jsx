@@ -1,21 +1,21 @@
-// import { Box } from 'components/Box';
-import { FormStyled } from './Phonebook.styled';
+import { PropTypes } from 'prop-types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { postContact } from 'redux/operations';
+import { patchContact, postContact } from 'redux/contacts/contacts.operations';
 import { selectContacts } from 'redux/contacts/contacts.selectors';
 import { Box, Button, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export const ContactForm = () => {
+export const ContactForm = ({ editedId }) => {
   const contacts = useSelector(selectContacts);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   const [name, setName] = useState(() => localStorage.getItem('name') ?? '');
   const [nameError, setNameError] = useState(false);
   const changeName = event => {
-    console.log('event ', event);
     const { value } = event.target;
     localStorage.setItem('name', value);
     setName(value);
@@ -33,19 +33,25 @@ export const ContactForm = () => {
     setNumberError(false);
   };
 
-  const handleSubmitForm = (event, name, number) => {
+  const handleSubmitForm = async (event, name, number) => {
     event.preventDefault();
-    console.log('event ', event);
-    //Контакт вже існує
-    if (contacts.some(contact => contact.name === name)) {
+    //Контакт вже існує і не редагується
+    if (!editedId && contacts.some(contact => contact.name === name)) {
       toast.warning(`${name} is already in contacts.`);
-      clearName();
+      setNameError(true);
       return;
     }
 
-    //Інакше додає новий контакт
-    dispatch(postContact({ name, phone: number }));
-    toast.success('Contact added successfully!');
+    //Інакше оновлює, або додає новий контакт
+    try {
+      editedId
+        ? await dispatch(patchContact({ id: editedId, name, number })).unwrap()
+        : await dispatch(postContact({ name, number })).unwrap();
+    } catch (error) {
+      toast.error('Error saving contact');
+    }
+    navigate('/contacts');
+    toast.success('Contact saved successfully');
     clearForm();
   };
 
@@ -56,14 +62,19 @@ export const ContactForm = () => {
     localStorage.removeItem('number');
   };
 
-  const clearName = () => {
-    setName('');
-    localStorage.removeItem('name');
-  };
-
   return (
-    <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
-      <FormStyled onSubmit={event => handleSubmitForm(event, name, number)}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <Box
+        component="form"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={event => handleSubmitForm(event, name, number)}
+      >
         <Box display="flex" flexDirection="column">
           <TextField
             error={nameError}
@@ -107,9 +118,13 @@ export const ContactForm = () => {
           />
         </Box>
         <Button variant="contained" type="submit">
-          Add contact
+          Save
         </Button>
-      </FormStyled>
+      </Box>
     </Box>
   );
+};
+
+ContactForm.propTypes = {
+  editedId: PropTypes.string,
 };

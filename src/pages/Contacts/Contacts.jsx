@@ -1,32 +1,52 @@
-import { Box, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  CssBaseline,
+  Typography,
+} from '@mui/material';
+import ContactPhoneRoundedIcon from '@mui/icons-material/ContactPhoneRounded';
 
-import { ContactList } from 'components/Phonebook/ContactsList';
-import { Filter } from 'components/Phonebook/Filter';
+import { ContactsTable } from 'components/ContactsTable/ContactsTable';
+import { Filter } from 'components/Filter/Filter';
+import { STATUS } from 'constants/status.constants';
+import { useSelector } from 'react-redux';
+import { selectAuthStatus } from 'redux/auth/auth.selectors';
+import { Container } from '@mui/system';
 
-const sectionStyles = {
-  width: '416px',
-  mx: 'auto',
-  mt: '20px',
-  p: [4],
-  // bg: 'white',
-  border: ' 1px solid',
-  borderColor: '#e4e9f0',
-  borderRadius: '4px',
-  boxShadow:
-    'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
-  as: 'section',
-};
-
-export const Contacts = () => {
+export default function Contacts() {
+  const status = useSelector(selectAuthStatus);
   return (
     <>
-      <Box {...sectionStyles}>
-        <Typography component="h1" variant="h5" textAlign="center">
-          Contacts
-        </Typography>
-        <Filter />
-        <ContactList />
-      </Box>
+      <Container component="section" maxWidth="md">
+        <CssBaseline />
+        {status === STATUS.loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+            <CircularProgress size={100} />
+          </Box>
+        )}
+        {status === STATUS.success && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              gap: '24px',
+              mx: 'auto',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <ContactPhoneRoundedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5" textAlign="center">
+              My Contacts
+            </Typography>
+            <Filter />
+            <ContactsTable />
+          </Box>
+        )}
+      </Container>
     </>
   );
-};
+}

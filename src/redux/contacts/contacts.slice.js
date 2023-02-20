@@ -1,14 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteContact, fetchContacts, postContact } from 'redux/operations';
+import { STATUS } from 'constants/status.constants';
+import {
+  deleteContact,
+  fetchContacts,
+  patchContact,
+  postContact,
+} from 'redux/contacts/contacts.operations';
 
 const initialState = {
   items: [],
-  isLoading: false,
+  status: STATUS.idle,
   error: null,
 };
 
+const handlePending = state => {
+  state.status = STATUS.loading;
+};
 const handleRejected = (state, { payload }) => {
-  // state.isLoading = false;
+  state.status = STATUS.error;
   state.error = payload;
 };
 
@@ -17,18 +26,13 @@ const contactsSlice = createSlice({
   initialState,
   extraReducers: builder => {
     builder
-      .addCase(fetchContacts.pending, state => {
-        state.isLoading = true;
-      })
+      .addCase(fetchContacts.pending, handlePending)
       .addCase(fetchContacts.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
+        state.status = STATUS.success;
         state.error = null;
         state.items = payload;
       })
-      .addCase(fetchContacts.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        state.error = payload;
-      })
+      .addCase(fetchContacts.rejected, handleRejected)
       .addCase(deleteContact.fulfilled, (state, { payload }) => {
         // state.isLoading = false;
         state.error = null;
@@ -41,7 +45,15 @@ const contactsSlice = createSlice({
         state.error = null;
         state.items.push(payload);
       })
-      .addCase(postContact.rejected, handleRejected);
+      .addCase(postContact.rejected, handleRejected)
+      .addCase(patchContact.pending, handlePending)
+      .addCase(patchContact.fulfilled, (state, { payload }) => {
+        state.status = STATUS.success;
+        state.error = null;
+        const index = state.items.findIndex(({ id }) => id === payload.id);
+        state.items.splice(index, 1, payload);
+      })
+      .addCase(patchContact.rejected, handleRejected);
   },
 });
 

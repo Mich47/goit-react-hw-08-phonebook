@@ -1,12 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://63e7d624cbdc5658737e62f9.mockapi.io';
+const setAuthHeader = token => {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
+
   async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const token = state.auth.data.token;
+    if (token === null) {
+      return thunkAPI.rejectWithValue('Error authorization');
+    }
     try {
+      setAuthHeader(token);
       const { data } = await axios.get('/contacts');
       return data;
     } catch (error) {
@@ -17,9 +26,24 @@ export const fetchContacts = createAsyncThunk(
 
 export const postContact = createAsyncThunk(
   'contacts/postContact',
-  async ({ name, phone }, thunkAPI) => {
+  async ({ name, number }, thunkAPI) => {
     try {
-      const { data } = await axios.post('/contacts', { name, phone });
+      const { data } = await axios.post('/contacts', { name, number });
+      return data;
+    } catch (error) {
+      thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const patchContact = createAsyncThunk(
+  'contacts/patchContact',
+  async ({ id, name, number }, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(`/contacts/${id}`, {
+        name,
+        number,
+      });
       return data;
     } catch (error) {
       thunkAPI.rejectWithValue(error);
