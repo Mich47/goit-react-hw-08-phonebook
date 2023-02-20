@@ -21,10 +21,10 @@ export const App = () => {
 
   return (
     <BrowserRouter basename="/goit-react-hw-08-phonebook">
-      <SharedLayout />
+      {/* <SharedLayout /> */}
       <Suspense fallback="">
         <Routes>
-          <Route>
+          <Route path="/" element={<SharedLayout />}>
             <Route path="" element={<RestrictedRoute />}>
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
@@ -32,7 +32,7 @@ export const App = () => {
             </Route>
             <Route path="" element={<PrivateRoute />}>
               <Route path="contacts" element={<Contacts />} />
-              <Route path="new" element={<NewContact />} />
+              <Route path="new-contact" element={<NewContact />} />
               <Route path="profile" element={<Profile />} />
             </Route>
           </Route>

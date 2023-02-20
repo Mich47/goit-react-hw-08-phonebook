@@ -71,7 +71,6 @@ export const ContactForm = ({ editedId }) => {
           flexDirection: 'column',
           gap: '16px',
         }}
-        noValidate
         autoComplete="off"
         onSubmit={event => handleSubmitForm(event, name, number)}
       >

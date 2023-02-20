@@ -32,7 +32,7 @@ export const SharedLayout = () => {
       token
         ? [
             <NavLinkStyled to="/contacts">My Contacts</NavLinkStyled>,
-            <NavLinkStyled to="/new">New Contact</NavLinkStyled>,
+            <NavLinkStyled to="/new-contact">New Contact</NavLinkStyled>,
           ]
         : [
             <NavLinkStyled to="/login">Login</NavLinkStyled>,
