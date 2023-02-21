@@ -56,6 +56,7 @@ export const SharedLayout = ({ children }) => {
   };
 
   const handleLogout = async () => {
+    handleCloseUserMenu();
     try {
       await dispatch(logoutUser()).unwrap();
     } catch (error) {
@@ -172,15 +173,14 @@ export const SharedLayout = ({ children }) => {
               ))}
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {/* {token && ( */}
-              {true && (
-                <>
+            {token && (
+              <>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography
                     textAlign="center"
                     sx={{ display: { xs: 'none', sm: 'block' }, mr: 1 }}
                   >
-                    {/* {token.user.name} */}
+                    {token.user?.name && ''}
                   </Typography>
                   <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
@@ -225,14 +225,13 @@ export const SharedLayout = ({ children }) => {
                       </MenuItem>
                     </Menu>
                   </Box>
-                </>
-              )}
-            </Box>
+                </Box>
+              </>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
       <Box component="main" sx={{ py: 3 }}>
-        {/* <Outlet /> */}
         {children}
       </Box>
     </>
